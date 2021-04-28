@@ -3,7 +3,6 @@ use std::cmp::min;
 #[derive(Debug)]
 pub enum EncodingError {
     UnexpectedEndOfString,
-    Unimplemented,
 }
 
 #[derive(Debug)]

@@ -28,7 +28,6 @@ fn main() {
     )
     .unwrap();
     println!("Encoded: {:?}", encoded);
-    println!("Decoding");
     let decoded = decode(encoded).unwrap();
     println!("Decoded: {:?}", decoded);
 }
