@@ -66,7 +66,11 @@ fn find_next_match(
                 &input[starting_position..starting_position + j]
             );
             println!("buffer_windown - matched: {:?}", buffer_window - matched);
-            return Some((buffer_window - matched, j, input[starting_position].clone()));
+            return Some((
+                buffer_window - matched,
+                j,
+                input[starting_position + j].clone(),
+            ));
         }
     }
 
