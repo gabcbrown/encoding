@@ -22,7 +22,7 @@ fn main() {
 
     println!("Encoding input string: {:?}", opts.input);
     let encoded = encode(
-        &opts.input,
+        &opts.input.as_bytes(),
         opts.search_buffer_size,
         opts.lookahead_buffer_size,
     )
