@@ -1,10 +1,5 @@
-mod decode;
-mod encode;
-
-use decode::decode;
-use encode::encode;
-
 use clap::Clap;
+use manta::{decode::decode, encode::encode};
 
 #[derive(Clap)]
 #[clap(version = "0.1.0")]
@@ -17,12 +12,12 @@ struct Opts {
     lookahead_buffer_size: usize,
 }
 
-fn main() {
+pub fn main() {
     let opts: Opts = Opts::parse();
 
     println!("Encoding input string: {:?}", opts.input);
     let encoded = encode(
-        &opts.input.as_bytes(),
+        &opts.input,
         opts.search_buffer_size,
         opts.lookahead_buffer_size,
     )

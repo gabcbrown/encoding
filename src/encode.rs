@@ -9,18 +9,19 @@ pub enum EncodingError {
 pub struct Encoded(pub Vec<(usize, usize, u8)>);
 
 pub fn encode(
-    input: &[u8],
+    input: &str,
     search_buffer_size: usize,
     lookahead_buffer_size: usize,
 ) -> Result<Encoded, EncodingError> {
-    let input_len = input.len();
+    let bytes = input.as_bytes();
+    let input_len = bytes.len();
     let mut starting_position: usize = 0;
     let mut encoded = Vec::new();
 
     // TODO: verify what happens in edge case starting pos = input len... etc.
     while starting_position < input_len {
         let next_match = find_next_match(
-            input,
+            bytes,
             starting_position,
             search_buffer_size,
             lookahead_buffer_size,
