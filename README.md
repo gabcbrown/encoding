@@ -1,6 +1,9 @@
 ## To use
+Set nightly: (datatest package requires)
+```rustup override set nightly```
 
-```cargo run "test input"```
+Run library tests:
+```cargo test```
 
-## Notes
-Assumes ascii input, i.e. that a char = 1 byte.
+Run binary with custom input
+```cargo run <input>```
