@@ -1,9 +1,11 @@
 ## To use
-Set nightly: (datatest package requires)
+Set nightly: (required by datatest crate)
 ```rustup override set nightly```
 
-Run library tests:
-```cargo test```
+Run library correctness tests:
+```cargo test --test integration```
+
+Run library benchmark tests:
 
 Run binary with custom input
 ```cargo run <input>```

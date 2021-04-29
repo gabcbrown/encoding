@@ -34,7 +34,6 @@ pub fn encode(
     Ok(Encoded(encoded))
 }
 
-// TODO: need utf-e encoding support? if slice hits middle of multicharacter encoding we'll have a problem
 fn find_next_match(
     input: &[u8],
     starting_index: usize,
