@@ -1,7 +1,9 @@
 #![feature(custom_test_frameworks)]
 #![test_runner(datatest::runner)]
 
-use manta::{decode::decode, encode::encode};
+use chrono::naive::NaiveTime;
+use chrono::prelude::*;
+use encode::{decode::decode, encode::encode};
 use std::mem::size_of_val;
 use std::path::Path;
 
@@ -18,15 +20,40 @@ fn assert_roundtrip(input: &str) {
     assert_eq!(input, decoded.unwrap());
 }
 
-fn report_memory(input: &str, filename: &Path) {
+fn report_memory_and_time(input: &str, filename: &Path) {
     let input_size = size_of_val(input);
-    let encoded: Vec<(usize, usize, u8)> =
-        encode(input, BUFFER_WINDOW, LOOKAHEAD_WINDOW).unwrap().0;
-    let encoded_size = size_of_val(&*encoded);
+
+    let encoding_start = Utc::now();
+    let encoded = encode(input, BUFFER_WINDOW, LOOKAHEAD_WINDOW).unwrap();
+    let encoding_end = Utc::now();
+    let encoding_duration = encoding_end - encoding_start;
+
+    let encoded_size = size_of_val(&*encoded.0);
+
+    let decoding_start = Utc::now();
+    let _decoded = decode(encoded);
+    let decoding_end = Utc::now();
+    let decoding_duration = decoding_end - decoding_start;
+
     println!("\n File at {:?}:", filename);
-    println!("\t input size: {}", input_size,);
-    println!("\t encoded size: {}", encoded_size,);
-    println!("\t ratio: {} \n", input_size as f32 / encoded_size as f32);
+    println!(
+        "\t Encoding time: \t\t{}",
+        NaiveTime::from_hms(0, 0, 0)
+            .overflowing_add_signed(encoding_duration)
+            .0
+    );
+    println!(
+        "\t Decoding time: \t\t{}",
+        NaiveTime::from_hms(0, 0, 0)
+            .overflowing_add_signed(decoding_duration)
+            .0
+    );
+    println!("\t Input size: \t\t\t{} B", input_size,);
+    println!("\t Encoded size: \t\t\t{} B", encoded_size,);
+    println!(
+        "\t Ratio: \t\t\t{} \n",
+        input_size as f32 / encoded_size as f32
+    );
 }
 
 // ------------------------
@@ -55,37 +82,37 @@ fn small_unicode(input: &str) {
 // Some files were excluded because they failed to parse as valid UTF-8,
 // a requirement for the datatest framework, unfortunately.
 
-// #[datatest::files("tests/data/cantrbry", {
-//     input in r"^(.*)",
-// })]
-// #[test]
-// fn cantrbry(input: &str) {
-//     assert_roundtrip(input)
-// }
+#[datatest::files("tests/data/cantrbry", {
+    input in r"^(.*)",
+})]
+#[test]
+fn cantrbry(input: &str) {
+    assert_roundtrip(input)
+}
 
-// #[datatest::files("tests/data/artificl", {
-//     input in r"^(.*)",
-// })]
-// #[test]
-// fn artificl(input: &str) {
-//     assert_roundtrip(input)
-// }
+#[datatest::files("tests/data/artificl", {
+    input in r"^(.*)",
+})]
+#[test]
+fn artificl(input: &str) {
+    assert_roundtrip(input)
+}
 
-// #[datatest::files("tests/data/large", {
-//     input in r"^(.*)",
-// })]
-// #[test]
-// fn large(input: &str) {
-//     assert_roundtrip(input)
-// }
+#[datatest::files("tests/data/large", {
+    input in r"^(.*)",
+})]
+#[test]
+fn large(input: &str) {
+    assert_roundtrip(input)
+}
 
-// #[datatest::files("tests/data/misc", {
-//     input in r"^(.*)",
-// })]
-// #[test]
-// fn misc(input: &str) {
-//     assert_roundtrip(input)
-// }
+#[datatest::files("tests/data/misc", {
+    input in r"^(.*)",
+})]
+#[test]
+fn misc(input: &str) {
+    assert_roundtrip(input)
+}
 
 // ----------------
 // Efficiency Tests
@@ -95,6 +122,15 @@ fn small_unicode(input: &str) {
     filename = r"${1}",
 })]
 #[test]
-fn artificl_memory_efficiency(input: &str, filename: &Path) {
-    report_memory(input, filename);
+fn artificl_efficiency(input: &str, filename: &Path) {
+    report_memory_and_time(input, filename);
+}
+
+#[datatest::files("tests/data/large", {
+    input in r"^(.*)",
+    filename = r"${1}",
+})]
+#[test]
+fn large_efficiency(input: &str, filename: &Path) {
+    report_memory_and_time(input, filename);
 }

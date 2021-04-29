@@ -6,7 +6,7 @@ pub enum EncodingError {
 }
 
 #[derive(Debug)]
-pub struct Encoded(pub Vec<(usize, usize, u8)>);
+pub struct Encoded(pub Vec<(u8, u8, u8)>);
 
 pub fn encode(
     input: &str,
@@ -27,7 +27,7 @@ pub fn encode(
             lookahead_buffer_size,
         )
         .ok_or(EncodingError::UnexpectedEndOfString)?; // TODO: correct error?
-        starting_index += next_match.1 + 1;
+        starting_index += next_match.1 as usize + 1;
         encoded.push(next_match);
     }
 
@@ -39,7 +39,7 @@ fn find_next_match(
     starting_index: usize,
     search_buffer_size: usize,
     lookahead_buffer_size: usize,
-) -> Option<(usize, usize, u8)> {
+) -> Option<(u8, u8, u8)> {
     let buffer_window = min(starting_index, search_buffer_size);
     let lookahead_window = min(input.len() - starting_index - 1, lookahead_buffer_size); // - 1 because length and index are are off by 1 from each other, and we need to know the indexes available
 
@@ -50,8 +50,8 @@ fn find_next_match(
             &input[starting_index..starting_index + j],
         ) {
             return Some((
-                buffer_window - matched,
-                j,
+                (buffer_window - matched) as u8,
+                j as u8,
                 input[starting_index + j].clone(),
             ));
         }

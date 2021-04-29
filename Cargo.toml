@@ -1,20 +1,21 @@
 [package]
-name = "manta"
+name = "encode"
 version = "0.1.0"
 authors = ["Gabriela Brown <gabcbrown@gmail.com>"]
 edition = "2018"
 
 [lib]
-name = "manta"
+name = "encode"
 path = "src/lib.rs"
 
 [[bin]]
-name = "manta"
+name = "encode"
 path = "src/main.rs"
 
 [dependencies]
 clap = "3.0.0-beta.2"
 datatest = { git = "https://github.com/cormacrelf/datatest" }
+chrono = "0.4.19"
 
 [[test]]
 name = "integration"

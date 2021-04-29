@@ -1,5 +1,5 @@
 use clap::Clap;
-use manta::{decode::decode, encode::encode};
+use encode::{decode::decode, encode::encode};
 
 #[derive(Clap)]
 #[clap(version = "0.1.0")]

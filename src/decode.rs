@@ -12,7 +12,7 @@ pub fn decode(input: Encoded) -> Result<String, DecodingError> {
     // (offset, length, character)
     for (o, l, c) in input.0 {
         let len = decoded.len();
-        decoded.extend(&decoded[len - o..len - o + l].to_vec());
+        decoded.extend(&decoded[len - o as usize..len - o as usize + l as usize].to_vec());
         decoded.push(c.clone());
     }
 
