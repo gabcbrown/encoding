@@ -10,6 +10,9 @@ use std::path::Path;
 static BUFFER_WINDOW: usize = 6;
 static LOOKAHEAD_WINDOW: usize = 4;
 
+// ------------
+// Test Helpers
+// ------------
 fn assert_roundtrip(input: &str) {
     let encoded = encode(input, BUFFER_WINDOW, LOOKAHEAD_WINDOW);
     assert!(encoded.is_ok());
@@ -57,7 +60,7 @@ fn report_memory_and_time(input: &str, filename: &Path) {
 }
 
 // ------------------------
-// Simple correctness tests
+// Simple Correctness Tests
 // ------------------------
 #[datatest::files("tests/data/ascii", {
     input in r"^(.*)\.txt",
@@ -75,9 +78,9 @@ fn small_unicode(input: &str) {
     assert_roundtrip(input)
 }
 
-// ---------------
-// Research Corpus
-// ---------------
+// ---------------------
+// Research Corpus Tests
+// ---------------------
 // from: https://corpus.canterbury.ac.nz/descriptions/
 // Some files were excluded because they failed to parse as valid UTF-8,
 // a requirement for the datatest framework, unfortunately.

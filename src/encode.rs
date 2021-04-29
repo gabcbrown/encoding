@@ -18,7 +18,6 @@ pub fn encode(
     let mut starting_index: usize = 0;
     let mut encoded = Vec::new();
 
-    // TODO: verify what happens in edge case starting pos = input len... etc.
     while starting_index < input_len {
         let next_match = find_next_match(
             bytes,
@@ -26,7 +25,7 @@ pub fn encode(
             search_buffer_size,
             lookahead_buffer_size,
         )
-        .ok_or(EncodingError::UnexpectedEndOfString)?; // TODO: correct error?
+        .ok_or(EncodingError::UnexpectedEndOfString)?; 
         starting_index += next_match.1 as usize + 1;
         encoded.push(next_match);
     }
@@ -41,7 +40,9 @@ fn find_next_match(
     lookahead_buffer_size: usize,
 ) -> Option<(u8, u8, u8)> {
     let buffer_window = min(starting_index, search_buffer_size);
-    let lookahead_window = min(input.len() - starting_index - 1, lookahead_buffer_size); // - 1 because length and index are are off by 1 from each other, and we need to know the indexes available
+    // - 1 because length and index are are off by 1 from each other, and 
+    // we need to know the indexes available
+    let lookahead_window = min(input.len() - starting_index - 1, lookahead_buffer_size); 
 
     // +1 because .. upper bound is exclusive
     for j in (1..min(buffer_window, lookahead_window) + 1).rev() {
